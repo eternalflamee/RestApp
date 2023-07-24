@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.exceptions.UserNotFoundException;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
@@ -51,12 +52,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(String.format("User with id: '%s' not found", id)));
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public Optional<User> findByEmail(String email) throws UserNotFoundException {
+        return Optional.ofNullable(userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(String.format("User with email: '%s' not found", email))));
     }
 }
