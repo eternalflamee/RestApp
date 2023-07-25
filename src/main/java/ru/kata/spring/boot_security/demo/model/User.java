@@ -1,17 +1,20 @@
 package ru.kata.spring.boot_security.demo.model;
 
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 @Entity
 public class User implements UserDetails {
 
@@ -20,36 +23,29 @@ public class User implements UserDetails {
     @Column(name = "id")
     private Long id;
 
+    @Size(min = 1, max = 20)
     @Column(name = "name")
     private String name;
 
+    @Size(min = 1, max = 20)
     @Column(name = "surname")
     private String surname;
 
     @Column(name = "password")
     private String password;
 
+    @Min(1)
+    @Max(110)
     @Column(name = "age")
     private Integer age;
 
+    @Email(message = "This email is not correct!")
     @Column(name = "email")
     private String email;
 
     public User() {
     }
 
-    public User(Long id, String name, String surname, String password,
-                Integer age, String email, Set<Role> roles) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.password = password;
-        this.age = age;
-        this.email = email;
-        this.roles = roles;
-    }
-
-    @Fetch(FetchMode.JOIN)
     @ManyToMany
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -108,7 +104,7 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public String roleToString() {
+    public String getRoleToString() {
         return roles.stream().map(Object::toString)
                 .collect(Collectors.joining(" "));
     }
@@ -146,5 +142,23 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(name, user.name)
+                && Objects.equals(surname, user.surname)
+                && Objects.equals(password, user.password)
+                && Objects.equals(age, user.age)
+                && Objects.equals(email, user.email)
+                && Objects.equals(roles, user.roles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, surname, password, age, email, roles);
     }
 }

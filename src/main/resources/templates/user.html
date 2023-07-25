@@ -41,15 +41,7 @@
                             <th>Role</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr th:object="${user}">
-                            <td th:text="${user.id}">ID</td>
-                            <td th:text="${user.name}">First Name</td>
-                            <td th:text="${user.surname}">Last Name</td>
-                            <td th:text="${user.age}">Age</td>
-                            <td th:text="${user.email}">E-mail</td>
-                            <td th:text="${user.roleToString()}"></td>
-                        </tr>
+                        <tbody id="tBodyUser">
                         </tbody>
                     </table>
                 </div>
@@ -58,5 +50,6 @@
     </div>
 </div>
 <div th:include="/parts/scripts"></div>
+<script src="/js/user.js"></script>
 </body>
 </html>
