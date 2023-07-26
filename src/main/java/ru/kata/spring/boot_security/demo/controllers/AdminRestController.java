@@ -10,9 +10,9 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 import javax.validation.Valid;
 import java.util.List;
 
-@CrossOrigin
+//@CrossOrigin
 @RestController
-@PreAuthorize("hasRole('ROLE_ADMIN')")
+//@PreAuthorize("hasRole('ROLE_ADMIN')")
 @RequestMapping("/api/users")
 public class AdminRestController {
     private final UserService userService;
