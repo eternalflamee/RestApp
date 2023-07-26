@@ -1,7 +1,9 @@
 <nav class="navbar navbar-dark bg-dark">
             <span class="text-left col text-white">
-                <b th:utext="${user.email}"></b> with roles:
-                        <span th:text="${user.roleToString()}"></span>
+                <b>
+                    <span id="currentUserEmail"></span>
+                </b> with roles:
+                        <span id="currentUserRoles"> </span>
             </span>
     <a class="text-right col text-white-50" href="/logout">Logout</a>
 </nav>

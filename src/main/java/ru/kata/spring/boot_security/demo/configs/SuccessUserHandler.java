@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Set;
 
+/**
+ * Обработчик для перенаправления на URL-адрес после успешного входа
+ * в зависимости от уровня доступа (ролей).
+ */
 @Component
 public class SuccessUserHandler implements AuthenticationSuccessHandler {
     // Spring Security использует объект Authentication, пользователя авторизованной сессии.
@@ -23,7 +27,7 @@ public class SuccessUserHandler implements AuthenticationSuccessHandler {
         } else if (roles.contains("ROLE_ADMIN")) {
             httpServletResponse.sendRedirect("/admin");
         } else {
-            httpServletResponse.sendRedirect("/");
+            httpServletResponse.sendRedirect("/login");
         }
     }
 }
