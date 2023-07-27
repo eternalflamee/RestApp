@@ -16,8 +16,8 @@ import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
  * Конфигурация web-безопасности
  */
 @Configuration
-@EnableWebSecurity(debug = true)
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableWebSecurity
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final SuccessUserHandler successUserHandler;
     private final UserDetailsService userDetailsService;
@@ -32,8 +32,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/", "/login").permitAll()
-                .antMatchers("/user/").permitAll() //hasAnyRole("USER", "ADMIN")
-                .antMatchers("/admin/**").permitAll() //hasRole("ADMIN")
+                .antMatchers("/user/").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/css/**", "/js/**").permitAll()
                 .antMatchers("/api/**").permitAll()
                 .anyRequest().authenticated()
@@ -41,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/login")
                 .usernameParameter("email")
-                //.passwordParameter("password")
+                .passwordParameter("password")
                 .successHandler(successUserHandler)
                 .permitAll()
                 .and()
@@ -80,10 +80,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      *
      * @return SpringSecurityDialect()
      */
-    @Bean
+    /*@Bean
     public SpringSecurityDialect springSecurityDialect() {
         return new SpringSecurityDialect();
-    }
+    }*/
 
 
 

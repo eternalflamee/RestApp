@@ -1,20 +1,18 @@
 package ru.kata.spring.boot_security.demo.model;
 
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
+@Table(name = "users")
 @Entity
 public class User implements UserDetails {
 
@@ -23,29 +21,39 @@ public class User implements UserDetails {
     @Column(name = "id")
     private Long id;
 
-    @Size(min = 1, max = 20)
+
     @Column(name = "name")
     private String name;
 
-    @Size(min = 1, max = 20)
+
     @Column(name = "surname")
     private String surname;
 
     @Column(name = "password")
     private String password;
 
-    @Min(1)
-    @Max(110)
+
     @Column(name = "age")
     private Integer age;
 
-    @Email(message = "This email is not correct!")
+
     @Column(name = "email")
     private String email;
 
     public User() {
     }
 
+    public User(String name, String surname, String password,
+                Integer age, String email, Set<Role> roles) {
+        this.name = name;
+        this.surname = surname;
+        this.password = password;
+        this.age = age;
+        this.email = email;
+        this.roles = roles;
+    }
+
+    @Fetch(FetchMode.JOIN)
     @ManyToMany
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
